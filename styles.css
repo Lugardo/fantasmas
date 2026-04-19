@@ -32,6 +32,8 @@
 
 html { scroll-behavior: smooth; }
 
+html, body { overflow-x: hidden; max-width: 100%; }
+
 body {
   background: var(--bg-0);
   color: var(--ink);
@@ -141,6 +143,7 @@ img, svg { max-width: 100%; display: block; }
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  position: relative;
 }
 
 .logo {
@@ -973,51 +976,112 @@ img, svg { max-width: 100%; display: block; }
   .nav-toggle { display: flex; }
   .nav-menu {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 1px);
     left: 0;
     right: 0;
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     text-align: center;
-    background: rgba(5, 5, 7, 0.97);
+    background: rgba(5, 5, 7, 0.98);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid var(--border);
-    padding: 1rem 1.25rem 1.5rem;
-    gap: 0.4rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
+    padding: 0 1.25rem;
+    gap: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
   }
-  .nav-menu.open { max-height: 520px; }
-  .nav-menu li { border-bottom: 1px dashed var(--border); }
-  .nav-menu li:last-child { border-bottom: none; padding-top: 0.6rem; }
-  .nav-menu a { display: block; padding: 0.85rem 0.3rem; font-size: 0.95rem; }
+  .nav-menu.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    padding: 0.8rem 1.25rem 1.4rem;
+  }
+  .nav-menu li {
+    width: 100%;
+    max-width: 320px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .nav-menu li:last-child { border-bottom: none; padding-top: 0.8rem; }
+  .nav-menu a {
+    display: block;
+    padding: 0.9rem 0.3rem;
+    font-size: 0.95rem;
+    text-align: center;
+  }
   .nav-menu a::after { left: 50%; transform: translateX(-50%); }
-  .nav-cta { text-align: center; margin: 0 auto; display: inline-block; }
+  .nav-cta {
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block;
+    width: auto !important;
+  }
 
   /* Hero centrado */
-  .hero { padding: 5rem 1rem 3rem; min-height: 90vh; }
-  .hero-content { width: 100%; margin: 0 auto; }
-  .hero-title { letter-spacing: 1px; word-break: break-word; }
-  .hero-description { padding: 0 0.5rem; }
+  .hero {
+    padding: 4.5rem 1rem 2.5rem;
+    min-height: auto;
+  }
+  .hero-content {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 2.5px;
+    padding: 0 0.5rem;
+  }
+  .hero-title {
+    font-size: clamp(1.6rem, 8.5vw, 2.4rem);
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    padding: 0 0.2rem;
+  }
+  .hero-tagline {
+    font-size: clamp(1.1rem, 5.5vw, 1.6rem);
+    letter-spacing: 0.5px;
+    padding: 0 0.5rem;
+  }
+  .hero-description {
+    padding: 0 0.3rem;
+    font-size: 0.95rem;
+  }
   .hero-stats {
-    gap: 1.5rem 2rem;
+    gap: 1.2rem 1.8rem;
     justify-content: center;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
   }
-  .hero-stats > div { flex: 0 0 auto; }
-  .hero-stats span { font-size: 1.4rem; }
+  .hero-stats > div { flex: 0 0 auto; text-align: center; }
+  .hero-stats span { font-size: 1.3rem; }
+  .hero-stats small { font-size: 0.65rem; letter-spacing: 1.5px; }
   .hero-scroll { display: none; }
   .hero-cta {
     flex-direction: column;
     align-items: center;
     gap: 0.8rem;
     margin: 0 auto 2rem;
+    width: 100%;
   }
-  .hero-cta .btn { width: 100%; max-width: 320px; }
+  .hero-cta .btn { width: 100%; max-width: 300px; }
+
+  /* Glitch simplificado en móvil para evitar desbordes visuales */
+  .glitch::before,
+  .glitch::after { display: none; }
 
   /* Secciones centradas */
   .section-header {
@@ -1100,39 +1164,68 @@ img, svg { max-width: 100%; display: block; }
 }
 
 /* Small mobile */
-@media (max-width: 420px) {
-  .container { padding: 0 0.9rem; }
-  .nav { padding: 0.65rem 0.9rem; }
-  .logo-text { font-size: 1rem; }
+@media (max-width: 480px) {
+  .container { padding: 0 0.85rem; }
+  .nav { padding: 0.65rem 0.85rem; }
+  .logo-text { font-size: 0.95rem; letter-spacing: 0.5px; }
   .logo-mark { font-size: 1.3rem; }
 
-  .hero { padding: 4.5rem 0.9rem 2.5rem; }
-  .hero-title { font-size: 1.95rem; letter-spacing: 0.5px; }
-  .hero-tagline { font-size: 1.3rem; letter-spacing: 1px; }
-  .hero-description { font-size: 0.95rem; }
-  .hero-eyebrow { font-size: 0.72rem; letter-spacing: 2.5px; }
-  .hero-stats { gap: 1rem 1.5rem; }
-  .hero-stats span { font-size: 1.2rem; }
-  .hero-stats small { font-size: 0.65rem; letter-spacing: 1.5px; }
+  .hero { padding: 4.5rem 0.85rem 2.5rem; }
+  .hero-title {
+    font-size: clamp(1.4rem, 7.8vw, 1.9rem);
+    letter-spacing: 0;
+  }
+  .hero-tagline {
+    font-size: clamp(1rem, 5vw, 1.3rem);
+    letter-spacing: 0;
+  }
+  .hero-description { font-size: 0.9rem; }
+  .hero-stats { gap: 0.9rem 1.3rem; }
+  .hero-stats span { font-size: 1.15rem; }
+  .hero-stats small { font-size: 0.6rem; letter-spacing: 1px; }
 
-  .section { padding: 3rem 0; }
-  .section-title { font-size: 1.65rem; letter-spacing: 1px; }
-  .section-kicker { font-size: 0.68rem; letter-spacing: 2.5px; padding: 0.3rem 0.75rem; }
+  .section { padding: 2.8rem 0; }
+  .section-title { font-size: clamp(1.4rem, 6.5vw, 1.7rem); letter-spacing: 0.5px; }
+  .section-subtitle { font-size: 0.9rem; }
+  .section-kicker { font-size: 0.65rem; letter-spacing: 2px; padding: 0.28rem 0.7rem; }
 
   .pentagram { width: 180px; height: 180px; }
   .pentagram-inner { font-size: 3rem; }
 
-  .team-avatar { width: 88px; height: 88px; font-size: 1.4rem; }
-  .team-card { padding: 1.5rem 1.1rem; }
-  .service-card { padding: 1.7rem 1.1rem; }
-  .testimonial { padding: 1.8rem 1.3rem 1.3rem; }
+  .team-avatar { width: 84px; height: 84px; font-size: 1.3rem; }
+  .team-card { padding: 1.4rem 1rem; }
+  .team-card h3 { font-size: 1.05rem; }
+  .service-card { padding: 1.6rem 1rem; }
+  .service-card h3 { font-size: 1.05rem; }
+  .service-icon { font-size: 2.1rem; }
+  .testimonial { padding: 1.7rem 1.2rem 1.2rem; }
 
-  .process-num { font-size: 1.7rem; min-width: 2.4rem; }
-  .process-step { gap: 0.9rem; padding: 1.1rem; }
+  .process-num { font-size: 1.6rem; min-width: 2.2rem; }
+  .process-step { gap: 0.8rem; padding: 1rem; }
+  .process-body h3 { font-size: 1rem; }
 
-  .contact-ico { width: 38px; height: 38px; font-size: 1.2rem; }
-  .contact-info, .contact-form { padding: 1.2rem; }
-  .field input, .field textarea { padding: 0.75rem 0.9rem; font-size: 0.9rem; }
+  .reasons-grid { max-width: 340px; gap: 0.7rem; }
+  .reason { padding: 1.1rem 0.6rem; }
+  .reason span { font-size: 1.5rem; }
+  .reason h3 { font-size: 0.75rem; }
+
+  .contact-ico { width: 36px; height: 36px; font-size: 1.1rem; }
+  .contact-info, .contact-form { padding: 1.1rem; }
+  .contact-info h3 { font-size: 1.05rem; }
+  .field input, .field textarea { padding: 0.7rem 0.85rem; font-size: 0.9rem; }
+  .field label { font-size: 0.75rem; }
+
+  .btn { padding: 0.8rem 1.1rem; font-size: 0.75rem; letter-spacing: 1.2px; }
+  .footer-bottom { font-size: 0.78rem; }
+}
+
+/* Extra small */
+@media (max-width: 360px) {
+  .hero-title { font-size: 1.35rem; }
+  .hero-tagline { font-size: 1rem; }
+  .section-title { font-size: 1.3rem; }
+  .pentagram { width: 160px; height: 160px; }
+  .pentagram-inner { font-size: 2.6rem; }
 }
 
 /* Reduce motion */
